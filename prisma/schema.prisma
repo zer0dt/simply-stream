@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  identityPubKey         String     @id // Public key associated with the user's Bitcoin wallet, used as the primary key
+  lockstreams            Lockstream[]
+}
+
+model Lockstream {
+  id                     String  @id @default(uuid())
+  createdAt              DateTime       @default(now())
+  userId                 String  // Foreign key to reference User
+  name                   String  // Name of the lockstream
+  streamPubkey           String?  // Public key used for locking
+  fundingAddress         String?  // Address used for funding the locks
+  startDate              BigInt  // Starting date in UNIX timestamp
+  endDate                BigInt  // End date in UNIX timestamp
+  totalSatoshisLocked    BigInt  // Total number of Satoshis locked
+  satoshisUnlockedPerDay BigInt  // Number of Satoshis unlocked per day
+  funded                 Boolean @default(false)  // Indicates if the lockstream is funded
+  txid                   String?
+  user                   User    @relation(fields: [userId], references: [identityPubKey])
+}
