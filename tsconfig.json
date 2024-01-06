@@ -39,8 +39,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "bsv-test.mjs", "bsv-test.mjs"  ],
+    ".next/types/**/*.ts",
+    "bsv-test.mjs",
+    "bsv-test.mjs"
+  ],
   "exclude": [
     "node_modules"
   ],
