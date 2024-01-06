@@ -5,7 +5,7 @@ import NotFound from "./not-found"
 
 import { cn, dateRangeParams, formatDate } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { ActivityOperations } from "@/components/activity/activity-operations"
+import { ActivityOperations } from "@/components/stream/stream-operations"
 import { logColumns } from "@/components/stream/logs/logs-columns"
 import { StatsCards } from "@/components/stream/stats/stats-cards"
 import { Heatmap } from "@/components/charts/heatmap"
