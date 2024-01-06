@@ -1,6 +1,6 @@
 import { render, RenderResult } from "@testing-library/react"
 
-import { StatsCards } from "@/components/activity/stats/stats-cards"
+import { StatsCards } from "@/components/stream/stats/stats-cards"
 
 describe("StatsCards", () => {
   let data: {

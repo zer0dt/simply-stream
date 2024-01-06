@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "errors": [],
+  "scryptfile": "simplyStream.scrypt",
+  "sourceMapFile": "simplyStream.scrypt.map",
+  "ctxMethods": [
+    "increment"
+  ]
+}

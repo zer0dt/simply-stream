@@ -5,7 +5,7 @@ import { Lockstream } from "@prisma/client"
 
 import { formatDate } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ActivityOperations } from "@/components/activity/activity-operations"
+import { ActivityOperations } from "@/components/stream/stream-operations"
 import { SiBitcoinsv } from "react-icons/si"
 
 interface ActivityItemProps {

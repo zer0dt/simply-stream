@@ -3,9 +3,9 @@
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
 
-import { ActivityAddButton } from "@/components/activity/activity-add-button"
-import { ActivityItem } from "@/components/activity/activity-item"
-import { ActivityList } from "@/components/activity/activity-list"
+import { ActivityAddButton } from "@/components/stream/stream-add-button"
+import { ActivityItem } from "@/components/stream/stream-item"
+import { ActivityList } from "@/components/stream/stream-list"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
 import { Icons } from "@/components/icons"
 import { Shell } from "@/components/layout/shell"

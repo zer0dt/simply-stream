@@ -3,8 +3,8 @@
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
 import { Icons } from "@/components/icons"
 
-import { ActivityAddButton } from "./activity-add-button"
-import { ActivityItem } from "./activity-item"
+import { ActivityAddButton } from "./stream-add-button"
+import { ActivityItem } from "./stream-item"
 import { formatDate } from "@/lib/utils"
 
 interface StreamListProps {

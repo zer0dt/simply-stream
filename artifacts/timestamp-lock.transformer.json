@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "errors": [],
+  "scryptfile": "timestamp-lock.scrypt",
+  "sourceMapFile": "timestamp-lock.scrypt.map",
+  "ctxMethods": [
+    "redeem"
+  ]
+}
