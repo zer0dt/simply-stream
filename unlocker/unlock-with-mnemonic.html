@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Unlock with Mnemonic</title>
+    <script src="bip39.bundle.js"></script>
+    <script src="bsv.browser.min.js"></script>
+    <script src="unlock-scripts.js"></script>
+    <script type="text/javascript">
+
+        function handleSubmit() {
+            const output = document.getElementById('output').value;
+            const rawtx = document.getElementById('rawtx').value;
+            const mnemonic = document.getElementById('mnemonic').value;
+
+            try {
+                const result = unlock(output, rawtx, mnemonic);
+                document.getElementById('result').textContent = result;
+
+                console.log(result)
+
+            } catch (error) {
+                console.log(error)
+                document.getElementById('result').textContent = "Error: " + error.message;
+            }
+        }
+
+    </script>
+    <style>
+        #result {
+            word-wrap: break-word;
+            /* Breaks the line at any character to prevent overflow */
+            white-space: pre-wrap;
+            /* Preserves spaces and line breaks */
+            max-width: 70%;
+            /* Set a maximum width if desired */
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Enter Details</h2>
+    <form onsubmit="event.preventDefault(); handleSubmit();">
+        <label for="output">Output Number:</label><br>
+        <input type="text" id="output" name="output"><br>
+        <label for="rawtx">Raw Transaction:</label><br>
+        <input type="text" id="rawtx" name="rawtx"><br>
+        <label for="mnemonic">Mnemonic:</label><br>
+        <input type="text" id="mnemonic" name="mnemonic"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h3>Result</h3>
+    <div id="result"></div>
+</body>
+
+</html>

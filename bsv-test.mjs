@@ -1,11 +1,9 @@
 
 
-// import * as bip39 from 'bip39';
 import * as bip39 from "bip39";
+import { bsv } from "scrypt-ts";
 
-import { hash160, bsv } from "scrypt-ts";
-
-const callRedeem = async (
+const callRedeem = (
   unlockOutput,
   streamTxHex,
   mnemonic
@@ -21,10 +19,6 @@ const callRedeem = async (
 
     // paymail public key of the `paymail privateKey`
     const simplyCashPublicKey = simplyCashPrivateKey.publicKey;
-    console.log(
-      "hash160(pubkey): ",
-      hash160(new bsv.PublicKey(simplyCashPublicKey).toString())
-    );
 
     //relayX Address
     const simplyCashAddress = simplyCashPrivateKey.publicKey.toAddress(

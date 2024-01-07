@@ -47,8 +47,8 @@ export function ActivityAddButton({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [unlockTime, setUnlockTime] = useState("")
-  const [bitcoinToLock, setBitcoinToLock] = useState("");
-  const [bitcoinUnlockedPerDay, setBitcoinUnlockedPerDay] = useState("0");
+  const [bitcoinToLock, setBitcoinToLock] = useState(0);
+  const [bitcoinUnlockedPerDay, setBitcoinUnlockedPerDay] = useState(0);
 
 
   useEffect(() => {
@@ -58,13 +58,15 @@ export function ActivityAddButton({
       const end = new Date(endDate).getTime();
       if (start && end && end >= start) {
         const totalDays = Math.ceil((end - start) / (1000 * 3600 * 24)) + 1;
-        const unlockedPerDay = parseFloat(bitcoinToLock) / totalDays;
-        setBitcoinUnlockedPerDay(unlockedPerDay.toFixed(8)); // Assuming bitcoinToLock is a valid number
+        console.log(totalDays)
+        const unlockedPerDay = bitcoinToLock / totalDays;
+        console.log(unlockedPerDay)
+        setBitcoinUnlockedPerDay(unlockedPerDay); // Assuming bitcoinToLock is a valid number
       } else {
-        setBitcoinUnlockedPerDay("0");
+        setBitcoinUnlockedPerDay(0);
       }
     } else {
-      setBitcoinUnlockedPerDay("0");
+      setBitcoinUnlockedPerDay(0);
     }
   }, [bitcoinToLock, startDate, endDate]);
 
@@ -93,8 +95,8 @@ export function ActivityAddButton({
         startDate: startTimestamp,
         endDate: endTimestamp,
         unlockTime,
-        totalSatoshisLocked: Number(bitcoinToLock) * 100000000,
-        satoshisUnlockedPerDay: Number(bitcoinUnlockedPerDay) * 100000000,
+        totalSatoshisLocked: Math.round(bitcoinToLock * 100000000),
+        satoshisUnlockedPerDay: Math.round(bitcoinUnlockedPerDay * 100000000),
       };
 
       const newLockstream = await createNewLockstream(lockstreamData);
