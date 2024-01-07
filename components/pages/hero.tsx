@@ -17,14 +17,7 @@ export default function HeroHeader() {
           </div>
         </div>
         <div className="flex justify-center mx-auto max-w-6xl px-6 lg:px-8">
-        <iframe
-          width="80%"
-          height="500"
-          src={`https://www.youtube.com/embed/${videoId}`}
-          title="YouTube video player"
-          allow=""
-          allowFullScreen
-        ></iframe>
+        
         </div>
       </section>
     </>
