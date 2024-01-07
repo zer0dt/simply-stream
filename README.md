@@ -1,3 +1,5 @@
+Started with open source code from: https://iotawise.rdev.pro/
+
 git clone https://github.com/zer0dt/simply-stream.git
 
 cd simply-stream
