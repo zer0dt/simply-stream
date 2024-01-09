@@ -7,8 +7,12 @@ export const navLinks: Navigation = {
       href: "/",
     },
     {
-      title: "Dashboard",
+      title: "Streams",
       href: "/dashboard/streams",
+    },
+    {
+      title: "Unlock",
+      href: "/dashboard/unlock",
     }
   ],
 }
