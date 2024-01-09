@@ -44,8 +44,9 @@ export function UnlockButton({
   };
 
   const decode = (result: string) => {
-    setOpenQRScanner(false)
+    console.log(result)
     setDecodedQR(result)
+    setOpenQRScanner(false)
   }
 
   const decodeError = (error: Error) => {
