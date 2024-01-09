@@ -36,12 +36,26 @@ export function UnlockButton({
 }: UnlockButtonProps) {
 
     const [openQRScanner, setOpenQRScanner] = useState(false)
-
+    const [decodedQR, setDecodedQR] = useState<string |undefined>()
 
   const handleSubmit = async () => {
     setOpenQRScanner(true)
      
   };
+
+  const decode = (result: string) => {
+    setOpenQRScanner(false)
+    setDecodedQR(result)
+  }
+
+  const decodeError = (error: Error) => {
+    console.log(error?.message)
+    toast({
+        title: "Error",
+        description: error?.message,
+        variant: "destructive", // adjust based on your toast library's API
+      });
+  }
 
   return (
     <>
@@ -61,10 +75,14 @@ export function UnlockButton({
         
             {openQRScanner ? (
                 <QrScanner
-                onDecode={(result) => console.log(result)}
-                onError={(error) => console.log(error?.message)}
+                onDecode={(result) => decode(result)}
+                onError={(error) => decodeError(error)}
             />
+            ) : decodedQR ? (
+                <p>{decodedQR}</p>
             ) : null}
+
+
 
           <DialogFooter>
               <Button variant="outline" type="submit" onClick={handleSubmit}>Scan</Button>           
