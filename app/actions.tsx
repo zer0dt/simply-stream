@@ -193,6 +193,37 @@ export async function updateLockstreamDetails(
   }
 }
 
+export async function deleteLockstream(lockstreamId: string, identityPubKey: string) {
+
+  try {
+    // First, find the lockstream to ensure it exists and belongs to the user
+    const lockstream = await prisma.lockstream.findFirst({
+      where: {
+        id: lockstreamId,
+        userId: identityPubKey
+      },
+    });
+
+    if (!lockstream) {
+      throw new Error('Lockstream not found or access denied');
+    }
+
+    // Delete the lockstream
+    const deletedLockstream = await prisma.lockstream.delete({
+      where: {
+        id: lockstreamId
+      },
+    });
+
+    return deletedLockstream;
+
+  } catch (error) {
+    console.error("Error deleting lockstream:", error);
+    throw error; // Rethrow the error so that the caller can handle it
+  }
+}
+
+
 interface Vout {
   value: number;
   n: number;

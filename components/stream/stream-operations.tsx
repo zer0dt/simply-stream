@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 
 import { Button } from "@/components/ui/button"
@@ -24,13 +24,13 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 
-import { LogsAddForm } from "./logs/logs-add-form"
 import { Lockstream } from "@prisma/client"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
-import { routeModule } from "next/dist/build/templates/app-page"
+
 
 import { updateLockstreamName } from "@/app/actions"
+import { deleteLockstream } from "@/app/actions"
 
 
 async function changeNameStream(streamId: string, identityPubKey: string, newName: string) {
@@ -40,9 +40,6 @@ async function changeNameStream(streamId: string, identityPubKey: string, newNam
     const updatedLockstream = await updateLockstreamName(streamId, identityPubKey, newName);
 
     if (updatedLockstream) {
-      toast({
-        description: "Your stream name has been changed successfully.",
-      });
       return true;
     } else {
       throw new Error('Lockstream update failed');
@@ -52,6 +49,30 @@ async function changeNameStream(streamId: string, identityPubKey: string, newNam
     toast({
       title: "Something went wrong.",
       description: "Your stream name was not changed. Please try again.",
+      variant: "destructive",
+    });
+  }
+}
+
+async function deleteStream(streamId: string, identityPubKey: string) {
+  try {
+    
+    // Directly call the server action
+    const deletedLockstream = await deleteLockstream(streamId, identityPubKey);
+
+    if (deletedLockstream) {
+      toast({
+        description: "Your lockstream has been deleted.",
+      });
+      return true;
+    } else {
+      throw new Error('Lockstream update failed');
+    }
+  } catch (error) {
+    console.error("Error changing stream name:", error);
+    toast({
+      title: "Something went wrong.",
+      description: "Your lockstream was not deleted. Please try again.",
       variant: "destructive",
     });
   }
@@ -195,7 +216,30 @@ export function ActivityOperations({
                 event.preventDefault()
                 setIsDeleteLoading(true)
 
+                if (identityPubKey) {
+                  const deletedStream = await deleteStream(lockstream.id, identityPubKey)
 
+                  if (deletedStream) {
+                    setShowDeleteAlert(false)
+                    setIsDeleteLoading(false)
+
+                    toast({
+                      title: "Deleted",
+                      description: "Your lockstream has been deleted.",
+                      variant: "destructive", // adjust based on your toast library's API
+                    });
+
+                    router.refresh()
+                  }
+                } else {
+                  toast({
+                    title: "Error",
+                    description: "Please sign in with Panda Wallet.",
+                    variant: "destructive", // adjust based on your toast library's API
+                  });
+                }
+
+                
 
               }}
               disabled={isDeleteLoading}

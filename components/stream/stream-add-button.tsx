@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from "react"
 import { useRouter } from "next/navigation"
 
 import { Button, ButtonProps } from "@/components/ui/button"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 import {
   Dialog,
@@ -50,6 +51,8 @@ export function ActivityAddButton({
   const [bitcoinToLock, setBitcoinToLock] = useState(0);
   const [bitcoinUnlockedPerDay, setBitcoinUnlockedPerDay] = useState(0);
 
+  const [loading, setLoading] = useState(false)
+
 
   useEffect(() => {
     // Ensure all fields have values before calculating
@@ -71,6 +74,8 @@ export function ActivityAddButton({
   }, [bitcoinToLock, startDate, endDate]);
 
   const handleSubmit = async () => {
+
+    setLoading(true)
 
     if (identityPubKey) {
       console.log(identityPubKey);
@@ -104,8 +109,15 @@ export function ActivityAddButton({
 
       router.push(`/dashboard/streams/${newLockstream.id}`)
       router.refresh()
-    };
-    
+    } else {
+      toast({
+        title: "Error",
+        description: "Please sign in with Panda Wallet.",
+        variant: "destructive", // adjust based on your toast library's API
+      });
+      setLoading(false)   
+    }
+     
   };
 
   return (
@@ -212,7 +224,14 @@ export function ActivityAddButton({
           </div>
 
           <DialogFooter>
-            <Button variant="outline" type="submit" onClick={handleSubmit}>Create</Button>
+            {loading ? (
+              <Button variant="outline" disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Create
+            </Button>
+            ) : (
+              <Button variant="outline" type="submit" onClick={handleSubmit}>Create</Button>
+            )}            
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -17,8 +17,9 @@ import {
   BsFire,
   BsMoonStars,
   BsSun,
+  BsDatabaseFillLock
 } from "react-icons/bs"
-import { FaRegStar, FaSort, FaUserAlt, FaExternalLinkAlt } from "react-icons/fa"
+import { FaRegStar, FaSort, FaUserAlt, FaExternalLinkAlt, FaUnlockAlt } from "react-icons/fa"
 import { ImSpinner8, ImStatsBars } from "react-icons/im"
 import { LuSettings } from "react-icons/lu"
 import { MdDeleteForever, MdOutlineLogout } from "react-icons/md"
@@ -39,6 +40,8 @@ const icons = {
   dashboard: RxDashboard,
   activity: BsActivity,
   settings: LuSettings,
+  unlock: FaUnlockAlt,
+  lock: BsDatabaseFillLock,
 
   // Mode Toggle
   moon: BsMoonStars,

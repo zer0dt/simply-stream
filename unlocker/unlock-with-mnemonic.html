@@ -8,18 +8,58 @@
     <script src="bip39.bundle.js"></script>
     <script src="bsv.browser.min.js"></script>
     <script src="unlock-scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+        integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
+
+        // Helper function to convert hex string to byte array
+        function hexToBytes(hexString) {
+            const bytes = new Uint8Array(Math.ceil(hexString.length / 2));
+            for (let i = 0, j = 0; i < hexString.length; i += 2, j++) {
+                bytes[j] = parseInt(hexString.substr(i, 2), 16);
+            }
+            return bytes;
+        }
+
+        // Helper function to convert byte array to Base64 string
+        function bytesToBase64(byteArray) {
+            const binaryString = String.fromCharCode.apply(null, byteArray);
+            return window.btoa(binaryString);
+        }
 
         function handleSubmit() {
             const output = document.getElementById('output').value;
             const rawtx = document.getElementById('rawtx').value;
             const mnemonic = document.getElementById('mnemonic').value;
 
+            const qrCode = document.querySelector("#qr-code");
+
             try {
                 const result = unlock(output, rawtx, mnemonic);
-                document.getElementById('result').textContent = result;
 
+                console.log(result.length)
                 console.log(result)
+
+                // Convert hex to byte array
+                const byteArray = hexToBytes(result);
+
+                // Convert byte array to Base64
+                const base64Result = bytesToBase64(byteArray);
+
+                console.log(base64Result.length)
+                console.log(base64Result)
+
+                const generateQrCode = (base64Result) => {
+                    const qr = new QRCode(document.getElementById("qr-code"), {
+                        text: base64Result,
+                        width: 380,
+                        height: 380,
+                        correctLevel: QRCode.CorrectLevel.L
+                    });
+                };
+
+                generateQrCode(base64Result)
 
             } catch (error) {
                 console.log(error)
@@ -29,13 +69,39 @@
 
     </script>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        form input,
+        form label {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
         #result {
             word-wrap: break-word;
-            /* Breaks the line at any character to prevent overflow */
             white-space: pre-wrap;
-            /* Preserves spaces and line breaks */
             max-width: 70%;
-            /* Set a maximum width if desired */
+            text-align: center;
+        }
+
+        #qr-code {
+            text-align: center;
+            padding-bottom: 20px;
         }
     </style>
 </head>
@@ -53,7 +119,7 @@
     </form>
 
     <h3>Result</h3>
-    <div id="result"></div>
+    <div id="qr-code" class="m-auto"></div>
 </body>
 
 </html>

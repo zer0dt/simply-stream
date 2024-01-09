@@ -37,6 +37,7 @@ import router from "next/navigation"
 import Link from "next/link"
 import { getTransactionInfoforTable, VoutInfo } from "@/app/actions"
 import { useEffect, useState } from "react"
+import Loading from "@/app/(frontpage)/loading"
 
 interface DataTableProps {
   txid: string
@@ -44,7 +45,7 @@ interface DataTableProps {
 }
 
 const toISOFormat = (unixTimestamp: number) => {
-  return new Date(unixTimestamp*1000).toISOString();
+  return new Date(unixTimestamp * 1000).toISOString();
 };
 
 export function DataTable({
@@ -56,6 +57,8 @@ export function DataTable({
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
+  const [loading, setLoading] = useState(true)
+
   console.log(txid)
 
   useEffect(() => {
@@ -63,8 +66,10 @@ export function DataTable({
       try {
         const data = await getTransactionInfoforTable(txid);
         setTransactionData(data);
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching transaction data:', error);
+        setLoading(false)
       }
     };
 
@@ -75,7 +80,7 @@ export function DataTable({
   const columns: ColumnDef<VoutInfo>[] = [
     {
       accessorKey: 'timestamp',
-      header: 'Timestamp',
+      header: 'Unlock Timestamp',
       cell: (info) => formatDate(toISOFormat(Number(info.getValue())))
     },
     {
@@ -126,45 +131,49 @@ export function DataTable({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <TableHead key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map(row => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      {loading ? <Loading /> : (
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map(headerGroup => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <TableHead key={header.id}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.map(row => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map(cell => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
-      </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"
-
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
         >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
-
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
         >
           Next
         </Button>

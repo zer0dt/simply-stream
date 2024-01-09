@@ -7,9 +7,9 @@ export const navLinks: Navigation = {
       href: "/",
     },
     {
-      title: "Streams",
+      title: "Dashboard",
       href: "/dashboard/streams",
-    },
+    }
   ],
 }
 
@@ -18,7 +18,12 @@ export const dashboardLinks: Navigation = {
     {
       title: "Streams",
       href: "/dashboard/streams",
-      icon: "activity",
+      icon: "lock",
+    },
+    {
+      title: "Unlock",
+      href: "/dashboard/unlock",
+      icon: "unlock",
     }
   ],
 }
