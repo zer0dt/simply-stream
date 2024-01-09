@@ -10,7 +10,7 @@ export default function UnlockPage() {
   
   return (
     <Shell>
-      <DashboardHeader heading="Unlock" text="Scan and broadcast unlocking transaction.">
+      <DashboardHeader heading="Unlock" text="Enter QR scan results and broadcast unlocking transaction.">
         <UnlockButton />
       </DashboardHeader>
     </Shell>
