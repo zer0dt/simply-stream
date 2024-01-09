@@ -24,7 +24,7 @@ import { Input } from "../ui/input"
 import { WalletContext } from '@/app/context/WalletContextProvider'
 import { createNewLockstream } from "@/app/actions"
 
-import {QrScanner} from '@yudiel/react-qr-scanner';
+import { QrReader } from 'react-qr-reader';
 
 interface UnlockButtonProps extends ButtonProps { }
 
@@ -75,10 +75,18 @@ export function UnlockButton({
           </DialogHeader>
         
             {openQRScanner ? (
-                <QrScanner
-                onDecode={(result) => decode(result)}
-                onError={(error) => decodeError(error)}
-            />
+                <QrReader
+                onResult={(result, error) => {
+                  if (!!result) {
+                    setDecodedQR(result?.text);
+                  }
+        
+                  if (!!error) {
+                    console.info(error);
+                  }
+                }}
+                style={{ width: '100%' }}
+              />
             ) : decodedQR ? (
                 <p>{decodedQR}</p>
             ) : null}
