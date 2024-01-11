@@ -19,11 +19,13 @@ import {
   BsSun,
   BsDatabaseFillLock
 } from "react-icons/bs"
-import { FaRegStar, FaSort, FaUserAlt, FaExternalLinkAlt, FaUnlockAlt } from "react-icons/fa"
+import { FaRegStar, FaSort, FaUserAlt, FaExternalLinkAlt, FaUnlockAlt, FaDownload } from "react-icons/fa"
 import { ImSpinner8, ImStatsBars } from "react-icons/im"
 import { LuSettings } from "react-icons/lu"
 import { MdDeleteForever, MdOutlineLogout } from "react-icons/md"
 import { RxDashboard, RxMixerHorizontal } from "react-icons/rx"
+
+import { FaCopy } from "react-icons/fa6";
 
 export type IconKeys = keyof typeof icons
 
@@ -71,6 +73,8 @@ const icons = {
   mixer: RxMixerHorizontal,
   check: BsCheck2,
   star: FaRegStar,
+  copy: FaCopy,
+  download: FaDownload
 }
 
 export const Icons: IconsType = icons

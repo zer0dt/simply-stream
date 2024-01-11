@@ -11,8 +11,8 @@ export const navLinks: Navigation = {
       href: "/dashboard/streams",
     },
     {
-      title: "Unlock",
-      href: "/dashboard/unlock",
+      title: "Broadcast",
+      href: "/dashboard/broadcast",
     }
   ],
 }
@@ -25,8 +25,8 @@ export const dashboardLinks: Navigation = {
       icon: "lock",
     },
     {
-      title: "Unlock",
-      href: "/dashboard/unlock",
+      title: "Broadcast",
+      href: "/dashboard/broadcast",
       icon: "unlock",
     }
   ],

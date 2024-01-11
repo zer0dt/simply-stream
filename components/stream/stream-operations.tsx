@@ -224,9 +224,7 @@ export function ActivityOperations({
                     setIsDeleteLoading(false)
 
                     toast({
-                      title: "Deleted",
-                      description: "Your lockstream has been deleted.",
-                      variant: "destructive", // adjust based on your toast library's API
+                      description: "Your lockstream has been deleted."
                     });
 
                     router.refresh()

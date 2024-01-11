@@ -77,7 +77,7 @@ export default function ActivitiesPage() {
       ) : (
         <EmptyPlaceholder>
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-            <Icons.activity className="h-10 w-10" />
+            <Icons.lock className="h-10 w-10" />
           </div>
           <EmptyPlaceholder.Title>No lockstreams created</EmptyPlaceholder.Title>
           <EmptyPlaceholder.Description>

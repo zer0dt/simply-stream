@@ -244,6 +244,7 @@ export type VoutInfo = {
   index: number;
   value: number;
   timestamp: number;
+  script: string;
 };
 
 export async function getTransactionInfoforTable(txid: string): Promise<VoutInfo[]> {
@@ -266,6 +267,7 @@ export async function getTransactionInfoforTable(txid: string): Promise<VoutInfo
         index: vout.n,
         value: vout.value,
         scriptPubKeyAsm: vout.scriptPubKey.asm,
+        script: vout.scriptPubKey.hex,
         timestamp: timestamp
       };
     });

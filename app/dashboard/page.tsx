@@ -16,7 +16,7 @@ interface DashboardProps {
   searchParams: { from: string; to: string }
 }
 
-export default async function Dashboard({ searchParams }: DashboardProps) {
+export default function Dashboard({ searchParams }: DashboardProps) {
  
   const dateRange = dateRangeParams(searchParams)
 

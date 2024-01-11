@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons"
 import { Shell } from "@/components/layout/shell"
 
-export default async function DashboardLoading() {
+export default function DashboardLoading() {
   return (
     <Shell>
       <div className="flex justify-center p-8">

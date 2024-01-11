@@ -64,7 +64,7 @@ export function ActivityAddButton({
         console.log(totalDays)
         const unlockedPerDay = bitcoinToLock / totalDays;
         console.log(unlockedPerDay)
-        setBitcoinUnlockedPerDay(unlockedPerDay); // Assuming bitcoinToLock is a valid number
+        setBitcoinUnlockedPerDay(parseFloat(unlockedPerDay.toFixed(8))); // Assuming bitcoinToLock is a valid number
       } else {
         setBitcoinUnlockedPerDay(0);
       }
@@ -81,7 +81,7 @@ export function ActivityAddButton({
       console.log(identityPubKey);
       // 02a45894d4cc9424f779e4403f751cdce383d52a18b2f48fdf6467c097e5cdfc05
 
-        // Check if all required fields are filled
+      // Check if all required fields are filled
       if (!name || !startDate || !endDate || !bitcoinToLock) {
         toast({
           title: "Error",
@@ -107,6 +107,10 @@ export function ActivityAddButton({
       const newLockstream = await createNewLockstream(lockstreamData);
       console.log('Lockstream created:', newLockstream);
 
+      toast({
+        description: "Your lockstream has been created."
+      });
+
       router.push(`/dashboard/streams/${newLockstream.id}`)
       router.refresh()
     } else {
@@ -115,9 +119,9 @@ export function ActivityAddButton({
         description: "Please sign in with Panda Wallet.",
         variant: "destructive", // adjust based on your toast library's API
       });
-      setLoading(false)   
+      setLoading(false)
     }
-     
+
   };
 
   return (
@@ -204,7 +208,7 @@ export function ActivityAddButton({
                 type="number"
                 id="bitcoinToLock"
                 value={bitcoinToLock}
-                onChange={(e) => setBitcoinToLock(e.target.value)}
+                onChange={(e) => setBitcoinToLock(parseFloat(e.target.value))}
                 placeholder="Enter Bitcoin amount"
                 className="col-span-3"
                 required
@@ -226,12 +230,12 @@ export function ActivityAddButton({
           <DialogFooter>
             {loading ? (
               <Button variant="outline" disabled>
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              Create
-            </Button>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Create
+              </Button>
             ) : (
               <Button variant="outline" type="submit" onClick={handleSubmit}>Create</Button>
-            )}            
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

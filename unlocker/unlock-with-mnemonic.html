@@ -8,10 +8,130 @@
     <script src="bip39.bundle.js"></script>
     <script src="bsv.browser.min.js"></script>
     <script src="unlock-scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
-        integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="qrcode.min.js"></script>
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        form input,
+        form label {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #unlocked-raw-tx {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            max-width: 70%;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        #qr-code {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        #copy-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Enter Details</h2>
+    <form onsubmit="event.preventDefault(); handleSubmit();">
+        <label for="unlock-output">Unlock Output QR Code Results:</label><br>
+        <textarea rows="8" type="text" id="unlock-output" name="unlock-output" required
+            autocomplete="off"></textarea><br>
+        <label for="receive-address">Send Unlock To:</label><br>
+        <input type="text" id="receive-address" name="receive-address" required autocomplete="off"><br>
+        <label for="mnemonic">Mnemonic:</label><br>
+        <input type="text" id="mnemonic" name="mnemonic" required><br><br>
+
+        <label for="path">Derivation Path:</label><br>
+        <select id="path" name="path">
+            <option value="m/44'/145'/0'/0/0">/0/0</option>
+            <option value="m/44'/145'/0'/0/1">/0/1</option>
+            <option value="m/44'/145'/0'/0/2">/0/2</option>
+            <option value="m/44'/145'/0'/0/3">/0/3</option>
+            <option value="m/44'/145'/0'/0/4">/0/4</option>
+            <option value="m/44'/145'/0'/0/5">/0/5</option>
+            <option value="m/44'/145'/0'/0/6">/0/6</option>
+            <option value="m/44'/145'/0'/0/7">/0/7</option>
+            <option value="m/44'/145'/0'/0/8">/0/8</option>
+            <option value="m/44'/145'/0'/0/9">/0/9</option>
+        </select><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <h3>QR Code:</h3>
+    <div id="qr-code" class="m-auto"></div>
+
+    <h3>raw transaction base64:</h3>
+    <button id="copy-button">Copy to Clipboard</button>
+
+    <div id="unlocked-raw-tx" class="m-auto"></div>
+
     <script type="text/javascript">
+
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('unlocked-raw-tx').textContent;
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    alert('Copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy text to clipboard', err);
+                    alert('Failed to copy to clipboard');
+                });
+        }
+
+        document.getElementById('copy-button').addEventListener('click', copyToClipboard);
+
+        function isValidBitcoinAddress(address) {
+            try {
+                // The bsv library can throw an error if the address is invalid
+                bsv.Address.fromString(address);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function base64ToHex(base64) {
+            // Decode Base64 to binary string
+            const binaryString = window.atob(base64);
+
+            // Convert binary string to byte array
+            const byteArray = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                byteArray[i] = binaryString.charCodeAt(i);
+            }
+
+            // Convert byte array to hex string
+            let hexString = '';
+            byteArray.forEach(byte => {
+                hexString += byte.toString(16).padStart(2, '0');
+            });
+
+            return hexString;
+        }
 
         // Helper function to convert hex string to byte array
         function hexToBytes(hexString) {
@@ -29,17 +149,31 @@
         }
 
         function handleSubmit() {
-            const output = document.getElementById('output').value;
-            const rawtx = document.getElementById('rawtx').value;
+            const unlockOutputJson = document.getElementById('unlock-output').value;
+            const receiveAddress = document.getElementById('receive-address').value;
             const mnemonic = document.getElementById('mnemonic').value;
+            const path = document.getElementById('path').value;
 
-            const qrCode = document.querySelector("#qr-code");
+            if (!isValidBitcoinAddress(receiveAddress)) {
+                console.error('Invalid Bitcoin address');
+                alert('Invalid Bitcoin address')
+                return; // Stop further execution
+            }
+
+            console.log(path)
+
+            const qrCodeElement = document.querySelector("#qr-code");
 
             try {
-                const result = unlock(output, rawtx, mnemonic);
 
-                console.log(result.length)
-                console.log(result)
+                // Parse the JSON string
+                const unlockOutputData = JSON.parse(unlockOutputJson);
+
+                // Extract properties from the JSON object
+                const { txid, vout, satoshis, script } = unlockOutputData;
+                const scriptHex = base64ToHex(script)
+
+                const result = unlock(txid, vout, satoshis, scriptHex, receiveAddress, mnemonic, path);
 
                 // Convert hex to byte array
                 const byteArray = hexToBytes(result);
@@ -47,8 +181,10 @@
                 // Convert byte array to Base64
                 const base64Result = bytesToBase64(byteArray);
 
-                console.log(base64Result.length)
-                console.log(base64Result)
+                document.getElementById('unlocked-raw-tx').textContent = base64Result
+
+                // Clear the existing QR code
+                qrCodeElement.innerHTML = '';
 
                 const generateQrCode = (base64Result) => {
                     const qr = new QRCode(document.getElementById("qr-code"), {
@@ -68,58 +204,6 @@
         }
 
     </script>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        form input,
-        form label {
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        #result {
-            word-wrap: break-word;
-            white-space: pre-wrap;
-            max-width: 70%;
-            text-align: center;
-        }
-
-        #qr-code {
-            text-align: center;
-            padding-bottom: 20px;
-        }
-    </style>
-</head>
-
-<body>
-    <h2>Enter Details</h2>
-    <form onsubmit="event.preventDefault(); handleSubmit();">
-        <label for="output">Output Number:</label><br>
-        <input type="text" id="output" name="output"><br>
-        <label for="rawtx">Raw Transaction:</label><br>
-        <input type="text" id="rawtx" name="rawtx"><br>
-        <label for="mnemonic">Mnemonic:</label><br>
-        <input type="text" id="mnemonic" name="mnemonic"><br><br>
-        <input type="submit" value="Submit">
-    </form>
-
-    <h3>Result</h3>
-    <div id="qr-code" class="m-auto"></div>
 </body>
 
 </html>

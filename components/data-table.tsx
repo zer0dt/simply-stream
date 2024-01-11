@@ -38,6 +38,9 @@ import Link from "next/link"
 import { getTransactionInfoforTable, VoutInfo } from "@/app/actions"
 import { useEffect, useState } from "react"
 import Loading from "@/app/(frontpage)/loading"
+import { ReloadIcon } from "@radix-ui/react-icons"
+
+import { StreamUnlockButton } from "./stream/stream-unlock-button"
 
 interface DataTableProps {
   txid: string
@@ -58,8 +61,7 @@ export function DataTable({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
   const [loading, setLoading] = useState(true)
-
-  console.log(txid)
+ 
 
   useEffect(() => {
     const fetchTransactionData = async () => {
@@ -91,7 +93,20 @@ export function DataTable({
       accessorKey: 'index',
       header: 'Output',
     },
-    // ... Add more columns as needed
+    {
+      id: 'action', // unique ID for the column
+      header: () => <div className="text-right pr-6">Action</div>,
+      cell: (info) => (
+        <div className="text-right">
+          <StreamUnlockButton variant="outline" 
+            txid={txid}
+            value={info.row.original.value}
+            output={info.row.original.index}
+            script={info.row.original.script}
+          />
+        </div>
+      )
+    },
   ];
 
   const table = useReactTable({
@@ -112,13 +127,16 @@ export function DataTable({
   return (
     <div className="w-full overflow-x-auto">
       <div className="mb-4 flex items-center px-2 pt-1">
-        {children ?
-          <a target="_blank" href={"https://whatsonchain.com/tx/" + children} className="text-lg font-medium" rel="noopener noreferrer">
-            <div className="flex items-center">
-              {children.toString().slice(0, 8) + "..." + children.toString().slice(-8)}
-              <Icons.link className="ml-2 h-3 w-3" />
-            </div>
-          </a> : null}
+        {children ? (
+          <>
+            <a target="_blank" href={"https://whatsonchain.com/tx/" + children} className="text-lg font-medium" rel="noopener noreferrer">
+              <div className="flex items-center">
+                {children.toString().slice(0, 8) + "..." + children.toString().slice(-8)}
+                <Icons.link className="ml-2 h-3 w-3" />
+              </div>
+            </a>
+          </>
+        ) : null}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

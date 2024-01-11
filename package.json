@@ -48,6 +48,7 @@
     "date-fns": "^2.30.0",
     "lucide-react": "^0.305.0",
     "next": "14.0.1",
+    "next-qrcode": "^2.5.1",
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^1.4.2",
     "panda-wallet-provider": "^2.3.1",

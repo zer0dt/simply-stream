@@ -1,16 +1,22 @@
 
-const unlock = (unlockOutput, streamTxHex, mnemonic) => {
+const unlock = (txid, output, satoshis, script, receiveAddress, mnemonic, derivationPath) => {
     try {
         const seed = bip39.mnemonicToSeedSync(mnemonic);
         const hdPrivateKey = bsv.HDPrivateKey.fromSeed(seed, bsv.Networks.mainnet);
-        const simplyCashPriv = hdPrivateKey.deriveChild("m/44'/145'/0'/0/0");
+        const simplyCashPriv = hdPrivateKey.deriveChild(derivationPath);
         const simplyCashPrivateKey = simplyCashPriv.privateKey;
 
-        const simplyCashAddress = simplyCashPrivateKey.publicKey.toAddress(bsv.Networks.mainnet);
-        const receiveAddress = simplyCashAddress.toString();
         console.log("receiving address: ", receiveAddress);
 
-        const utxo = getUTXO(streamTxHex, unlockOutput);
+        const utxo = {
+            txid: txid,
+            vout: output,
+            satoshis: satoshis,       
+            script: script
+        };
+
+        console.log(utxo)
+
         const lockedScript = bsv.Script(utxo.script);
         const pubKeyHex = lockedScript.chunks[17].buf.toString("hex");
         console.log(pubKeyHex);
@@ -60,16 +66,6 @@ const unlock = (unlockOutput, streamTxHex, mnemonic) => {
     } catch (error) {
         console.error("An error occurred:", error);
     }
-};
-
-const getUTXO = (rawtx, idx) => {
-    const bsvtx = new bsv.Transaction(rawtx);
-    return {
-        satoshis: bsvtx.outputs[idx].satoshis,
-        vout: idx,
-        txid: bsvtx.hash,
-        script: bsvtx.outputs[idx].script.toHex(),
-    };
 };
 
 const unlockLockScript = (tx, inputIndex, lockTokenScript, satoshis, privkey) => {

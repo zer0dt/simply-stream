@@ -114,6 +114,9 @@ export function FundStreamButton({
                 if (broadcast) {
                     const updatedLockstream = await updateLockstreamDetails(lockstream.id, identityPubKey, broadcast.txid, selectedPubKey, bsvAddress, true)
                     console.log(updatedLockstream)
+                    toast({
+                        description: "Your lockstream has been funded."
+                      });
                     router.push("/dashboard/streams")
                 }                
                 
