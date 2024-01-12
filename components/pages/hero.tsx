@@ -1,5 +1,14 @@
 'use client'
 
+import Image from "next/image"
+
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "../ui/button"
+import Link from "next/link"
+import { siteConfig } from "@/config/site"
+import { Icons } from "../icons"
+import { ImageFrame } from "@/components/image-frame"
+
 const videoId = "FKUdU4xyP0w"
 
 export default function HeroHeader() {
@@ -19,9 +28,37 @@ export default function HeroHeader() {
             <p>Setup a stream of bitcoins to unlock in the future.</p>
             <p>Lock in on generational wealth.</p>
           </div>
+
+          <div className="flex gap-4">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/Panda-Wallet/panda-wallet/releases/tag/v2.11.3"
+              className={cn(buttonVariants({ variant: "secondary" }))}
+            >
+              Panda Wallet
+            </a>
+            <Link
+              href={siteConfig.links.github}
+              target="_blank"
+              className={cn(buttonVariants({ variant: "outline" }))}
+            >
+              <Icons.github className="mr-2 h-4 w-4" />
+              <span>GitHub</span>
+            </Link>
+          </div>
         </div>
         <div className="flex justify-center mx-auto max-w-6xl px-6 lg:px-8">
-        
+        <ImageFrame>
+            <Image
+              className="rounded-lg"
+              src="/images/lockstream-image.jpg"
+              width={500}
+              height={500}
+              quality={100}
+              alt="Header image"
+            />
+          </ImageFrame>
         </div>
       </section>
     </>

@@ -77,7 +77,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <body className={cn("antialiased", inter.className)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <NextTopLoader color="#DC2645" height={2.5} showSpinner={false} />
+          <NextTopLoader color="#FF9900" height={2.5} showSpinner={false} />
           <PandaWrapper>
           <WalletContextProvider>
           <div
