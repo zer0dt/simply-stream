@@ -83,7 +83,6 @@ export default function ActivitiesPage() {
           <EmptyPlaceholder.Description>
             Create a lockstream to lock bitcoin into the future.
           </EmptyPlaceholder.Description>
-          <ActivityAddButton variant="outline" />
         </EmptyPlaceholder>
       )
       }

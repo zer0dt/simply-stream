@@ -137,17 +137,7 @@ export function DataTable({
             </a>
           </>
         ) : null}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              <Icons.mixer className="mr-2 h-4 w-4" />
-              View
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-
-          </DropdownMenuContent>
-        </DropdownMenu>
+        
       </div>
       {loading ? <Loading /> : (
         <div className="rounded-md border">
