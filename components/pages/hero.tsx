@@ -38,14 +38,14 @@ export default function HeroHeader() {
             >
               Panda Wallet
             </a>
-            <Link
-              href={siteConfig.links.github}
+            <a
               target="_blank"
+              rel="noopener noreferrer"
+              href="https://simply.cash/"
               className={cn(buttonVariants({ variant: "outline" }))}
             >
-              <Icons.github className="mr-2 h-4 w-4" />
-              <span>GitHub</span>
-            </Link>
+              SimplyCash
+            </a>
           </div>
         </div>
         <div className="flex justify-center mx-auto max-w-6xl px-6 lg:px-8">
