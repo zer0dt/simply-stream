@@ -115,7 +115,6 @@ export default function BroadcastPage() {
         <Card>
           <CardHeader>
             <CardTitle>Unlocked Raw Transaction</CardTitle>
-            <CardDescription>Enter the unlocked raw transaction from the offline unlocker.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-1">

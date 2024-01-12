@@ -7,7 +7,11 @@ export default function HeroHeader() {
     <>
       <section className="space-y-8 pb-12 pt-4 md:space-y-16 md:pt-10 lg:py-32">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-
+          <h1
+            className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
+          >
+            Experimental. Use at your own risk!
+          </h1>
           <h1 className="text-4xl font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
             Lock your bitcoin.
           </h1>
